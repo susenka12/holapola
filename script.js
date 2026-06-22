@@ -11,9 +11,37 @@ const fortunes = [
   "Kočka ti šeptá: buď trpělivý a bude to stát za to."
 ];
 
+const yesNoFortunes = [
+  "Ano, dnes je pro to dobrý čas.",
+  "Ne, raději počkej ještě chvíli.",
+  "Spíš ano, ale buď připraven na změnu.",
+  "Spíš ne, teď to není nejvhodnější okamžik.",
+  "Ano, kočičí energie je na tvé straně.",
+  "Ne, hvězdy raději doporučují trpělivost.",
+  "Ano, je to šance, kterou stojí za to využít.",
+  "Ne, teď je lepší dávat pozor a sledovat situaci."
+];
+
 const button = document.getElementById("fortuneButton");
 const resultBox = document.getElementById("fortuneResult");
 const questionInput = document.getElementById("fortuneQuestion");
+
+function isYesNoQuestion(text) {
+  const lower = text.toLowerCase();
+  const yesNoStart = /^(je|bude|budeš|budou|může|mohou|mohu|můžeš|máš|máte|mají|musím|musíš|chce|stane|dostanu|lze|li)\b/;
+  const yesNoPhrase = /(ano\s*ne|ano\/ne|ano nebo ne|li\s*ne|li\s*ano)/;
+  return yesNoStart.test(lower) || yesNoPhrase.test(lower);
+}
+
+function getFortune(question) {
+  if (isYesNoQuestion(question)) {
+    const index = Math.floor(Math.random() * yesNoFortunes.length);
+    return yesNoFortunes[index];
+  }
+
+  const index = Math.floor(Math.random() * fortunes.length);
+  return fortunes[index];
+}
 
 button.addEventListener("click", () => {
   const question = questionInput.value.trim();
@@ -22,8 +50,7 @@ button.addEventListener("click", () => {
     return;
   }
 
-  const randomIndex = Math.floor(Math.random() * fortunes.length);
-  const fortune = fortunes[randomIndex];
+  const fortune = getFortune(question);
   resultBox.textContent = `Otázka: "${question}"
 
 Věštba: ${fortune}`;
